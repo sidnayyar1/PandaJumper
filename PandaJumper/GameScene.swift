@@ -127,43 +127,26 @@ class GameScene: SKScene {
       addChild(spike)
     }
 //
-//
-//
-//
-//    //this function is for movement of the mario
-//    func move(sprite: SKSpriteNode, velocity: CGPoint) {
-//      let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
-//                                 y: velocity.y * CGFloat(dt))
-//      sprite.position += amountToMove
-//    }
-//
     
     
     
     
-//    func spawnCoin() {
-//      // 1
-//      let coin = SKSpriteNode(imageNamed: "coin")
-//      coin.position = CGPoint(
-//        x: CGFloat.random(min: playableRect.minX,
-//                          max: playableRect.maxX),
-//        y: CGFloat.random(min: playableRect.minY,
-//                          max: playableRect.maxY))
-//        coin.name = "coin"
-//      //coin.setScale(0)
-//      addChild(coin)
-//      // 2
-////      let appear = SKAction.scale(to: 1.0, duration: 0.5)
-////      let wait = SKAction.wait(forDuration: 5.0)
-////      let disappear = SKAction.scale(to: 0, duration: 0.5)
-////      let removeFromParent = SKAction.removeFromParent()
-////      let actions = [appear, wait, disappear, removeFromParent]
-////      cat.run(SKAction.sequence(actions))
-//        let actionMove =
-//               SKAction.moveBy(x: -(size.width + coin.size.width), y: 0, duration: 1.5)
-//             let actionRemove = SKAction.removeFromParent()
-//             coin.run(SKAction.sequence([actionMove, actionRemove]))
-//    }
+    func spawnCoin() {
+      // 1
+      let coin = SKSpriteNode(imageNamed: "coin")
+      coin.position = CGPoint(
+        x: CGFloat.random(min: playableRect.minX,
+                          max: playableRect.maxX),
+        y: CGFloat.random(min: playableRect.minY,
+                          max: playableRect.maxY))
+        coin.name = "coin"
+      //coin.setScale(0)
+      addChild(coin)
+        let actionMove =
+               SKAction.moveBy(x: -(size.width + coin.size.width), y: 0, duration: 1.5)
+             let actionRemove = SKAction.removeFromParent()
+             coin.run(SKAction.sequence([actionMove, actionRemove]))
+    }
     
     
     
@@ -196,17 +179,17 @@ class GameScene: SKScene {
      func go(){
 
         
-            let moveRight = SKAction.move(to: CGPoint(x: playableRect.width, y:  220), duration: 2)
+            let moveRight = SKAction.move(to: CGPoint(x: playableRect.width, y:  220), duration: 5)
 
-            let RPL = SKAction.scaleX(to: panda1.xScale * -1, duration: 0)
+           // let RPL = SKAction.scaleX(to: panda1.xScale * -1, duration: 5)
 
-            let moveLeft = SKAction.move(to: CGPoint(x: 0, y:  220), duration: 2)
+            let moveLeft = SKAction.move(to: CGPoint(x: 0, y:  220), duration: 5)
 
-            let RPR = SKAction.scaleX(to: panda1.xScale , duration: 0)
+           // let RPR = SKAction.scaleX(to: panda1.xScale , duration: 0)
 
 
 
-    panda1.run(SKAction.repeatForever(SKAction.sequence([moveRight, RPL, moveLeft, RPR])))
+    panda1.run(SKAction.repeatForever(SKAction.sequence([moveRight, moveLeft])))
 
         }
     //   playBackgroundMusic(filename: "BgSound.wav")
