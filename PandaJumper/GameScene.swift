@@ -16,9 +16,18 @@ class GameScene: SKScene {
   var dt: TimeInterval = 0
   let PandaMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPoint.zero
+    var invincible = false
   let playableRect: CGRect
   var lastTouchLocation: CGPoint?
     //let maximumMovePersecond = 80
+    var lives = 3
+    var coin = 0
+    var coinsCollected = 0
+    var finalScore = 0
+     let scoresLabel = SKLabelNode(fontNamed: "Chalkduster")
+    var gameOver = false
+    var exit =  false
+    
   let labelNode = SKLabelNode(fontNamed: "Chalkduster")
     
   override init(size: CGSize) {
@@ -36,19 +45,6 @@ class GameScene: SKScene {
   }
 
     
-//  var cameraRect : CGRect {
-//     let x = cameraNode.position.x - size.width/2
-//         + (size.width - playableRect.width)/2
-//     let y = cameraNode.position.y - size.height/2
-//         + (size.height - playableRect.height)/2
-//     return CGRect(
-//       x: x,
-//       y: y,
-//       width: playableRect.width,
-//       height: playableRect.height)
-//   }
-    
-    
   func debugDrawPlayableArea() {
     let shape = SKShapeNode()
     let path = CGMutablePath()
@@ -61,101 +57,32 @@ class GameScene: SKScene {
     
 
     
+    func spawnCoin() {
+      // 1
+      let cat = SKSpriteNode(imageNamed: "coin2")
+      cat.name = "coin"
+      cat.position = CGPoint(
+        x: playableRect.minX + 700,
+        y: playableRect.minY + 90)
+      cat.zPosition = 50
+      cat.setScale(0)
+      addChild(cat)
+      // 2
+      let appear = SKAction.scale(to: 1.0, duration: 0.5)
+
+      let actions = [appear]
+      cat.run(SKAction.sequence(actions))
+    }
     
-    
-//    func moveCamera() {
-//       let backgroundVelocity =
-//         CGPoint(x: cameraMovePointsPerSec, y: 0)
-//       let amountToMove = backgroundVelocity * CGFloat(dt)
-//       cameraNode.position += amountToMove
-//
-//       enumerateChildNodes(withName: "bakground") { node, _ in
-//         let background = node as! SKSpriteNode
-//         if background.position.x + background.size.width <
-//             self.cameraRect.origin.x {
-//           background.position = CGPoint(
-//             x: background.position.x + background.size.width*2,
-//             y: background.position.y)
-//         }
-//       }
-//
-//     }
-//
-    
-    
-    
-    // this function gives different layout of the background.
-    
-    
-//    func backgroundNode() -> SKSpriteNode {
-//       // 1
-//       let backgroundNode = SKSpriteNode()
-//       backgroundNode.anchorPoint = CGPoint.zero
-//       backgroundNode.name = "bakground"
-//       backgroundNode.zPosition = -1
-//
-//       // 2
-//       let background1 = SKSpriteNode(imageNamed: "bakground")
-//       background1.anchorPoint = CGPoint.zero
-//       background1.position = CGPoint(x: 0, y: 0)
-//       backgroundNode.addChild(background1)
-//
-//       // 3
-//       let background2 = SKSpriteNode(imageNamed: "bakground")
-//       background2.anchorPoint = CGPoint.zero
-//       background2.position =
-//         CGPoint(x: background1.size.width, y: 0)
-//       backgroundNode.addChild(background2)
-//
-//       // 4
-//       backgroundNode.size = CGSize(
-//         width: background1.size.width + background2.size.width,
-//         height: background1.size.height)
-//       return backgroundNode
-//     }
-    
-    
-    
-    
-    
-    
-    //this function is for the enemy
     func spawnSpikes() {
       let spike = SKSpriteNode(imageNamed: "spikes")
         spike.position = CGPoint(x: CGFloat.random(min: playableRect.minX + 190, max: playableRect.maxX - 180),y: 220)
         spike.setScale(1.5)
       addChild(spike)
     }
-//
-    
-    
-    
-    
-    func spawnCoin() {
-      // 1
-      let coin = SKSpriteNode(imageNamed: "coin")
-      coin.position = CGPoint(
-        x: CGFloat.random(min: playableRect.minX,
-                          max: playableRect.maxX),
-        y: CGFloat.random(min: playableRect.minY,
-                          max: playableRect.maxY))
-        coin.name = "coin"
-      //coin.setScale(0)
-      addChild(coin)
-        let actionMove =
-               SKAction.moveBy(x: -(size.width + coin.size.width), y: 0, duration: 1.5)
-             let actionRemove = SKAction.removeFromParent()
-             coin.run(SKAction.sequence([actionMove, actionRemove]))
-    }
-    
-    
-    
-    
-    
-    //This override function helps in running the application
+
   override func didMove(to view: SKView) {
 
-    
     let background = SKSpriteNode(imageNamed: "background")
     background.anchorPoint = .zero// default
     
@@ -172,7 +99,14 @@ class GameScene: SKScene {
     debugDrawPlayableArea()
     spawnSpikes()
     go()
-   
+    
+    labelNode.text = "Lives: \(lives)"
+    labelNode.fontColor = .black
+    labelNode.fontSize = 100
+    labelNode.zPosition = 1300
+    labelNode.position = CGPoint(x:300,
+                                 y:500)
+    addChild(labelNode)
     
     }
     
@@ -192,35 +126,7 @@ class GameScene: SKScene {
     panda1.run(SKAction.repeatForever(SKAction.sequence([moveRight, moveLeft])))
 
         }
-    //   playBackgroundMusic(filename: "BgSound.wav")
 //
-//    for i in 0...1 {
-//      let background = backgroundNode()
-//      background.anchorPoint = CGPoint.zero
-//      background.position =
-//        CGPoint(x: CGFloat(i)*background.size.width, y: 0)
-//      background.name = "bakground"
-//      background.zPosition = -1
-//      addChild(background)
-//    }
-//
-//
-//    mario.zPosition = 100
-//    addChild(mario)
-//    // this line below move the animation and mario
-//
-//    mario.run(SKAction.repeatForever(marioAnimation))
-//    mario.run(SKAction.repeatForever(marioMove))
-//
-//    run(SKAction.repeatForever(
-//      SKAction.sequence([SKAction.run() { [weak self] in
-//                      self?.spawnEnemy()
-//                    },
-//                    SKAction.wait(forDuration: 2.0)])))
-//
-//    addChild(cameraNode)
-//    camera = cameraNode
-//    cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
 //
 //    livesLabel.text = "Lives: X"
 //    livesLabel.fontColor = SKColor.black
@@ -255,37 +161,15 @@ class GameScene: SKScene {
     
     
     
-//    //this function is mario when it gets hit by enemy
-//  func marioHit(enemy: SKSpriteNode) {
-//  invincible = true
-//  let blinkTimes = 10.0
-//  let duration = 3.0
-//  let blinkAction = SKAction.customAction(withDuration: duration) { node, elapsedTime in
-//    let slice = duration / blinkTimes
-//    let remainder = Double(elapsedTime).truncatingRemainder(
-//      dividingBy: slice)
-//    node.isHidden = remainder > slice / 2
-//  }
-//  let setHidden = SKAction.run() { [weak self] in
-//    self?.mario.isHidden = false
-//    self?.invincible = false
-//  }
-//  mario.run(SKAction.sequence([blinkAction, setHidden]))
-//
-//  run(enemyCollisionSound)
-//
-//  lives -= 1
-//
-//  }
+    //this function is mario when it gets hit by enemy
     
     
-    
-//
+  
 //    func checkCollisions() {
-//        var hitCoins: [SKSpriteNode] = []
+//         var hitCoins: [SKSpriteNode] = []
 //        enumerateChildNodes(withName: "coin") { node, _ in
 //          let coin = node as! SKSpriteNode
-//          if coin.frame.intersects(self.mario.frame) {
+//          if coin.frame.intersects(self.panda1.frame) {
 //            hitCoins.append(coin)
 //          }
 //        }
@@ -296,29 +180,25 @@ class GameScene: SKScene {
 //        enumerateChildNodes(withName: "Enemy") { node, _ in
 //          let enemy = node as! SKSpriteNode
 //          if node.frame.insetBy(dx: 20, dy: 20).intersects(
-//            self.mario.frame) {
+//            self.panda1.frame) {
 //            hitEnemies.append(enemy)
 //          }
 //        }
 //        for enemy in hitEnemies {
-//          marioHit(enemy: enemy)
+//          pandaHit(enemy: enemy)
 //        }
 //      }
 //
-//
-//    func coinHit(enemy: SKSpriteNode) {
-//
-//     //   run(coinCollisionSound)
-//       enemy.removeFromParent()
-//       coin += 1
-//        print(coin)
-//
-//        finalScore = coin
-//
-//      }
-//
-//
-    
+    func coinHit(enemy: SKSpriteNode) {
+
+
+       enemy.removeFromParent()
+       coin += 1
+        print(coin)
+
+        finalScore = coin
+
+      }
     
     
     
@@ -333,12 +213,7 @@ class GameScene: SKScene {
 
 
     }
-//
-    
-    
-    
-    
-    
+
     
     
     override func touchesBegan(_ touches: Set<UITouch>,
@@ -349,10 +224,6 @@ class GameScene: SKScene {
        let touchLocation = touch.location(in: self)
        sceneTouched(touchLocation: touchLocation)
      }
-    
-    
-
-    
     
     
   override func update(_ currentTime: TimeInterval) {
@@ -368,7 +239,10 @@ class GameScene: SKScene {
     lastUpdateTime = currentTime
     move(sprite: panda1, velocity: velocity)
     boundsCheckPanda()
-
+collideSpike()
+    spawnCoin()
+    
+    
 //
 //   move(sprite: mario, velocity: velocity)
 // moveCamera()
@@ -402,8 +276,82 @@ class GameScene: SKScene {
 //           // 3
 //           view?.presentScene(gameOver, transition: reveal)
 //    }
+    }
+//    func collisionSpike()
+//         {
+//             enumerateChildNodes(withName: "spike")
+//             {
+//                 node, _ in
+//                 let spike = node as! SKSpriteNode
+//                 if spike.frame.offsetBy(dx: 50, dy: 50).intersects(self.panda1.frame)
+//                 {
+//                     self.lives -= 1
+//                    print(self.lives)
+//                     self.labelNode.text = "Lives: \(self.lives)"
+//
+//                 }
+//             }
+//         }
     
-  }
+    func collideSpike()
+      {
+          var spikes:[SKSpriteNode] = []
+          enumerateChildNodes(withName: "spike")
+          {
+              node, _ in
+              let spike = node as! SKSpriteNode
+              if spike.frame.insetBy(dx: 30, dy: 30).intersects(self.panda1.frame.insetBy(dx: 20, dy: 20))
+              {
+                  //self.lastChanged -= 1
+                  spikes.append(spike)
+                  spike.removeFromParent()
+                  self.lives -= 1
+                  self.panda1.position = CGPoint(x:100,
+                                                      y:150)
+                 
+               
+              }
+              
+             
+          }
+          for spike in spikes
+          {
+              spike.removeFromParent()
+               self.spawnSpikes()
+              
+          }
+         
+          enumerateChildNodes(withName: "coin")
+          {node ,_ in
+                       
+              let coin = node as! SKSpriteNode
+                  if coin.frame.intersects(self.panda1.frame)
+              {
+                  self.coin += 1
+                  coin.removeFromParent()
+              }
+          
+          }
+         
+          
+          enumerateChildNodes(withName: "exit")
+          {
+              node, _ in
+              
+              let exit = node as! SKSpriteNode
+              if exit.frame.insetBy(dx: 50   , dy: 50).intersects(self.panda1.frame)
+              {
+                  self.panda1.removeFromParent()
+                  
+                  let reveal = SKTransition.reveal(with: .up, duration: 1.0)
+                 
+              }
+              
+              
+          }
+      }
+    
+  
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
                                   y: velocity.y * CGFloat(dt))
@@ -427,25 +375,6 @@ class GameScene: SKScene {
                velocity.x = -velocity.x
            }
            
-//     let bottomLeft = CGPoint(x: 0, y: playableRect.minY)
-//       let topRight = CGPoint(x: size.width, y: playableRect.maxY)
-//
-//       if panda1.position.x <= bottomLeft.x {
-//         panda1.position.x = bottomLeft.x
-//         velocity.x = -velocity.x
-//       }
-//       if panda1.position.x >= topRight.x {
-//         panda1.position.x = topRight.x
-//         velocity.x = -velocity.x
-//       }
-//       if panda1.position.y <= bottomLeft.y {
-//         panda1.position.y = bottomLeft.y
-//         velocity.y = -velocity.y
-//       }
-//       if panda1.position.y >= topRight.y {
-//         panda1.position.y = topRight.y
-//         velocity.y = -velocity.y
-//       }
      }
    
   
