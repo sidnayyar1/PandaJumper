@@ -120,22 +120,12 @@ class GameScene: SKScene {
     
     
     //this function is for the enemy
-//    func spawnEnemy() {
-//      let enemy = SKSpriteNode(imageNamed: "Enemy")
-//      enemy.position = CGPoint(
-//        // assigning position of the enemy
-//        x: cameraRect.maxX + enemy.size.width/2,
-//        y: cameraRect.minY + 80)
-//      enemy.zPosition = 50
-//      enemy.name = "Enemy"
-//      enemy.setScale(0.7)
-//      addChild(enemy)
-//      // this line below let the enemy move with action move function
-//      let actionMove =
-//        SKAction.moveBy(x: -(size.width + enemy.size.width), y: 0, duration: 4.0)
-//      let actionRemove = SKAction.removeFromParent()
-//      enemy.run(SKAction.sequence([actionMove, actionRemove]))
-//    }
+    func spawnSpikes() {
+      let spike = SKSpriteNode(imageNamed: "spikes")
+        spike.position = CGPoint(x: CGFloat.random(min: playableRect.minX + 190, max: playableRect.maxX - 180),y: 220)
+        spike.setScale(1.5)
+      addChild(spike)
+    }
 //
 //
 //
@@ -193,14 +183,32 @@ class GameScene: SKScene {
        print("Size: \(mySize)")
     
     
-     panda1.position = CGPoint(x: 200, y: 250)
+     panda1.position = CGPoint(x: 100, y: 150)
 
     addChild(panda1)
     debugDrawPlayableArea()
-    
+    spawnSpikes()
+    go()
    
     
     }
+    
+     func go(){
+
+        
+            let moveRight = SKAction.move(to: CGPoint(x: playableRect.width, y:  220), duration: 2)
+
+            let RPL = SKAction.scaleX(to: panda1.xScale * -1, duration: 0)
+
+            let moveLeft = SKAction.move(to: CGPoint(x: 0, y:  220), duration: 2)
+
+            let RPR = SKAction.scaleX(to: panda1.xScale , duration: 0)
+
+
+
+    panda1.run(SKAction.repeatForever(SKAction.sequence([moveRight, RPL, moveLeft, RPR])))
+
+        }
     //   playBackgroundMusic(filename: "BgSound.wav")
 //
 //    for i in 0...1 {
@@ -336,7 +344,7 @@ class GameScene: SKScene {
 //
     func sceneTouched(touchLocation:CGPoint) {
     let actionJump : SKAction
-    actionJump = SKAction.moveBy(x: 0, y: 350, duration: 0.7)
+        actionJump = SKAction.moveBy(x: 0, y: 500, duration: 1.0)
     let jumpSequence = SKAction.sequence([actionJump, actionJump.reversed()])
     panda1.run(jumpSequence)
 
