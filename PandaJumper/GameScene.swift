@@ -11,15 +11,14 @@ import SpriteKit
 
 class GameScene: SKScene {
   
-  let panda1 = SKSpriteNode(imageNamed: "panda")
- var lastUpdateTime: TimeInterval = 0
-  var dt: TimeInterval = 0
-  let PandaMovePointsPerSec: CGFloat = 480.0
+    let panda1 = SKSpriteNode(imageNamed: "panda")
+    var lastUpdateTime: TimeInterval = 0
+    var dt: TimeInterval = 0
+    let PandaMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPoint.zero
     var invincible = false
-  let playableRect: CGRect
-  var lastTouchLocation: CGPoint?
-    //let maximumMovePersecond = 80
+    let playableRect: CGRect
+    var lastTouchLocation: CGPoint?
     var lives = 3
     var coin = 0
     var coinsCollected = 0
@@ -44,7 +43,7 @@ class GameScene: SKScene {
     fatalError("init(coder:) has not been implemented")
   }
 
-    
+    // this function created a rectangle shape
   func debugDrawPlayableArea() {
     let shape = SKShapeNode()
     let path = CGMutablePath()
@@ -56,7 +55,7 @@ class GameScene: SKScene {
   }
     
 
-    
+    // this function
     func spawnCoin() {
       // 1
       let cat = SKSpriteNode(imageNamed: "coin2")
@@ -253,7 +252,6 @@ collideSpike()
                   self.lives -= 1
                   self.panda1.position = CGPoint(x:100,
                                                       y:150)
-               
               }
              
           }
