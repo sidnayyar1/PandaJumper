@@ -74,6 +74,8 @@ class GameScene: SKScene {
       cat.run(SKAction.sequence(actions))
     }
     
+    
+    
     func spawnSpikes() {
       let spike = SKSpriteNode(imageNamed: "spikes")
         spike.position = CGPoint(x: CGFloat.random(min: playableRect.minX + 190, max: playableRect.maxX - 180),y: 220)
@@ -126,71 +128,8 @@ class GameScene: SKScene {
     panda1.run(SKAction.repeatForever(SKAction.sequence([moveRight, moveLeft])))
 
         }
-//
-//
-//    livesLabel.text = "Lives: X"
-//    livesLabel.fontColor = SKColor.black
-//    livesLabel.fontSize = 100
-//    livesLabel.zPosition = 150
-//    livesLabel.horizontalAlignmentMode = .left
-//    livesLabel.verticalAlignmentMode = .bottom
-//    livesLabel.position = CGPoint(
-//        x: -playableRect.size.width/2 + CGFloat(20),
-//        y: -playableRect.size.height/2 + CGFloat(20))
-//    cameraNode.addChild(livesLabel)
-//
-//    CoinLabel.text = "Coins: X"
-//    CoinLabel.fontColor = SKColor.black
-//                   CoinLabel.fontSize = 100
-//                  CoinLabel.zPosition = 150
-//    CoinLabel.horizontalAlignmentMode = .right
-//    CoinLabel.verticalAlignmentMode = .top
-//    CoinLabel.position = CGPoint(x: -playableRect.size.width/2 + CGFloat(20),
-//                                 y: -playableRect.size.width/2 + CGFloat(20))
-//                          cameraNode.addChild(CoinLabel)
-//
-//
-//    run(SKAction.repeatForever(
-//    SKAction.sequence([SKAction.run() { [weak self] in
-//                        self?.spawnCoin()
-//                      },
-//                       SKAction.wait(forDuration: 0.5)])))
-//
-//  }
-//
-    
-    
-    
-    //this function is mario when it gets hit by enemy
-    
-    
-  
-//    func checkCollisions() {
-//         var hitCoins: [SKSpriteNode] = []
-//        enumerateChildNodes(withName: "coin") { node, _ in
-//          let coin = node as! SKSpriteNode
-//          if coin.frame.intersects(self.panda1.frame) {
-//            hitCoins.append(coin)
-//          }
-//        }
-//        for cat in hitCoins {
-//          coinHit(enemy: cat)
-//        }
-//        var hitEnemies: [SKSpriteNode] = []
-//        enumerateChildNodes(withName: "Enemy") { node, _ in
-//          let enemy = node as! SKSpriteNode
-//          if node.frame.insetBy(dx: 20, dy: 20).intersects(
-//            self.panda1.frame) {
-//            hitEnemies.append(enemy)
-//          }
-//        }
-//        for enemy in hitEnemies {
-//          pandaHit(enemy: enemy)
-//        }
-//      }
-//
-    func coinHit(enemy: SKSpriteNode) {
 
+    func coinHit(enemy: SKSpriteNode) {
 
        enemy.removeFromParent()
        coin += 1
@@ -201,10 +140,6 @@ class GameScene: SKScene {
       }
     
     
-    
-    
-    
-//
     func sceneTouched(touchLocation:CGPoint) {
     let actionJump : SKAction
         actionJump = SKAction.moveBy(x: 0, y: 500, duration: 1.0)
@@ -213,8 +148,28 @@ class GameScene: SKScene {
 
 
     }
-
     
+    
+    
+//this fucntion is to exit from the game
+    func spawnExit() {
+         let exit = SKSpriteNode(imageNamed: "exit")
+         exit.name = "exit"
+         exit.position = CGPoint(
+           x: playableRect.maxX-100,
+           y: playableRect.minY + 100)
+         exit.zPosition = 50
+         exit.setScale(0)
+         addChild(exit)
+         // 2
+         let appear = SKAction.scale(to: 1.0, duration: 0.5)
+
+         let actions = [appear]
+         exit.run(SKAction.sequence(actions))
+       }
+    
+    
+    // this function is to touch the panda and make it jump
     
     override func touchesBegan(_ touches: Set<UITouch>,
          with event: UIEvent?) {
@@ -226,9 +181,10 @@ class GameScene: SKScene {
      }
     
     
+    //this is ovverride update function
+    
   override func update(_ currentTime: TimeInterval) {
   
-   // panda1.position = CGPoint(x: panda1.position.x + 8,y: panda1.position.y)
     
     if lastUpdateTime > 0 {
       dt = currentTime - lastUpdateTime
@@ -241,57 +197,47 @@ class GameScene: SKScene {
     boundsCheckPanda()
 collideSpike()
     spawnCoin()
-    
-    
-//
-//   move(sprite: mario, velocity: velocity)
-// moveCamera()
-//    livesLabel.text = "Lives: \(lives)"
-//    CoinLabel.text = "Coins: \(coin)"
-//    checkCollisions()
-//
-//    if lives <= 0 && !gameOver {
-//      gameOver = true
-//      print("You lose!")
-//        print("Your Final Score is " + String(finalScore))
-//      backgroundMusicPlayer.stop()
-//
-//        let gameOver = GameOverScene(size: size, won: false)
-//       // let gameOverScene = Gam(size: size, won: false)
-//        //gameOverScene.scaleMode = scaleMode
-//        gameOver.scaleMode = scaleMode
-//        // 2
-//        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-//        // 3
-//        view?.presentScene(gameOver, transition: reveal)
-//
-//    } else if finalScore>=3 {
-//
-//    let gameOver = GameOverScene(size: size, won: true)
-//          // let gameOverScene = Gam(size: size, won: false)
-//           //gameOverScene.scaleMode = scaleMode
-//           gameOver.scaleMode = scaleMode
-//           // 2
-//           let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-//           // 3
-//           view?.presentScene(gameOver, transition: reveal)
-//    }
+ labelNode.text = "Lives: \(lives)"
+ labelNode.text = "Coins: \(coin)"
+    if(coinsCollected >= 2)
+       {
+           spawnExit()
+       }
+    if lives <= 0 && !gameOver {
+      gameOver = true
+      print("You lose!")
+        print("Your Final Score is " + String(finalScore))
+        
+        
+//if the user loses the game he will se the you Lose screen
+        
+        
+        let gameOver = GameOverScene(size: size, won: false)
+     
+        gameOver.scaleMode = scaleMode
+        
+        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+
+        view?.presentScene(gameOver, transition: reveal)
+
+    } else if finalScore>=3 {
+        print("You win!")
+        print("Your Final Score is " + String(finalScore))
+        
+        
+   //if the user wons the game he will se the you win screen
+        
+        
+        let gameOver = GameOverScene(size: size, won: true)
+           gameOver.scaleMode = scaleMode
+          
+           let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+           // 3
+           view?.presentScene(gameOver, transition: reveal)
     }
-//    func collisionSpike()
-//         {
-//             enumerateChildNodes(withName: "spike")
-//             {
-//                 node, _ in
-//                 let spike = node as! SKSpriteNode
-//                 if spike.frame.offsetBy(dx: 50, dy: 50).intersects(self.panda1.frame)
-//                 {
-//                     self.lives -= 1
-//                    print(self.lives)
-//                     self.labelNode.text = "Lives: \(self.lives)"
-//
-//                 }
-//             }
-//         }
+    }
+
+    // this fucntion checks the collision of the spikes from the panda
     
     func collideSpike()
       {
@@ -302,16 +248,13 @@ collideSpike()
               let spike = node as! SKSpriteNode
               if spike.frame.insetBy(dx: 30, dy: 30).intersects(self.panda1.frame.insetBy(dx: 20, dy: 20))
               {
-                  //self.lastChanged -= 1
                   spikes.append(spike)
                   spike.removeFromParent()
                   self.lives -= 1
                   self.panda1.position = CGPoint(x:100,
                                                       y:150)
-                 
                
               }
-              
              
           }
           for spike in spikes
@@ -322,7 +265,7 @@ collideSpike()
           }
          
           enumerateChildNodes(withName: "coin")
-          {node ,_ in
+          { node ,_ in
                        
               let coin = node as! SKSpriteNode
                   if coin.frame.intersects(self.panda1.frame)
@@ -346,11 +289,10 @@ collideSpike()
                   let reveal = SKTransition.reveal(with: .up, duration: 1.0)
                  
               }
-              
-              
           }
       }
     
+    // this function is to move the panda
   
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
@@ -360,7 +302,7 @@ collideSpike()
         
      }
     
-    
+    // this function helps in creating the rectangle so that panda should not go out of screen.
     func boundsCheckPanda() {
         let bottomLeft:CGPoint = CGPoint(x:0,
                                             y:playableRect.minY)
@@ -376,10 +318,5 @@ collideSpike()
            }
            
      }
-   
-  
-  
-    
-    
     
 }
