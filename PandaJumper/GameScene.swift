@@ -1,11 +1,4 @@
 
-//
-//  GameScene.swift
-//  ZombieConga1
-//
-//  Created by Mervat Mustafa on 2020-06-08.
-//  Copyright © 2020 Mervat Mustafa. All rights reserved.
-//
 
 import SpriteKit
 
